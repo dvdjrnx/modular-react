@@ -1,12 +1,26 @@
 import { useEffect, useState } from 'react';
-import type { LocalPaymentMethod, RemotePaymentMethod } from '../types';
+import type { RemotePaymentMethod, RemotePaymentMethods } from '../types';
+import { PaymentMethod } from '../models/PaymentMethod';
 
 export const usePaymentMethods = () => {
-  const [paymentMethods, setPaymentMethods] = useState<LocalPaymentMethod[]>(
-    []
-  );
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
 
   useEffect(() => {
+    const payInCash = new PaymentMethod({ name: 'cash' });
+
+    const convertPaymentMethods = (methods: RemotePaymentMethod[]) => {
+      if (methods.length === 0) {
+        return [];
+      }
+
+      const extended: PaymentMethod[] = methods.map(
+        (method) => new PaymentMethod(method)
+      );
+      extended.push(payInCash);
+
+      return extended;
+    };
+
     const fetchPaymentMethods = async () => {
       const url = 'https://payment-methods1.p.rapidapi.com/payment-methods';
       const options = {
@@ -19,19 +33,10 @@ export const usePaymentMethods = () => {
 
       try {
         const response = await fetch(url, options);
-        const { paymentMethods: methods }: RemotePaymentMethod =
+        const { paymentMethods: methods }: RemotePaymentMethods =
           await response.json();
 
-        if (methods.length > 0) {
-          const extended: LocalPaymentMethod[] = methods.map((method) => ({
-            provider: method.name,
-            label: `Pay with ${method.name}`,
-          }));
-          extended.push({ provider: 'cash', label: 'Pay in cash' });
-          setPaymentMethods(extended);
-        } else {
-          setPaymentMethods([]);
-        }
+        setPaymentMethods(convertPaymentMethods(methods));
       } catch (error) {
         console.error(error);
         setPaymentMethods([]);

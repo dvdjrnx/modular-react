@@ -4,10 +4,9 @@ export interface LocalPaymentMethod {
 }
 
 export interface RemotePaymentMethod {
-  paymentMethods: [
-    {
-      id: string;
-      name: string;
-    }
-  ];
+  name: string;
+}
+
+export interface RemotePaymentMethods {
+  paymentMethods: [RemotePaymentMethod];
 }
