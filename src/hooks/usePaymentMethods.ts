@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { LocalPaymentMethod, RemotePaymentMethod } from './types';
+import type { LocalPaymentMethod, RemotePaymentMethod } from '../types';
 
-export const Payment = ({ amount }: { amount: number }) => {
+export const usePaymentMethods = () => {
   const [paymentMethods, setPaymentMethods] = useState<LocalPaymentMethod[]>(
     []
   );
@@ -41,23 +41,7 @@ export const Payment = ({ amount }: { amount: number }) => {
     fetchPaymentMethods();
   }, []);
 
-  return (
-    <div>
-      <h3>Payment</h3>
-      <div>
-        {paymentMethods.map((method) => (
-          <label key={method.provider}>
-            <input
-              type='radio'
-              name='payment'
-              value={method.provider}
-              defaultChecked={method.provider === 'cash'}
-            />
-            <span>{method.label}</span>
-          </label>
-        ))}
-      </div>
-      <button>${amount}</button>
-    </div>
-  );
+  return {
+    paymentMethods,
+  };
 };

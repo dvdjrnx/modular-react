@@ -1,4 +1,4 @@
-import { Payment } from './Payment';
+import { Payment } from './components/Payment';
 
 function App() {
   return <Payment amount={19.83} />;
