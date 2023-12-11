@@ -10,3 +10,9 @@ export interface RemotePaymentMethod {
 export interface RemotePaymentMethods {
   paymentMethods: [RemotePaymentMethod];
 }
+
+export interface DonationCheckboxProps {
+  onChange: () => void;
+  checked: boolean;
+  content: string;
+}
