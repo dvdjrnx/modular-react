@@ -1,4 +1,5 @@
 import { usePaymentMethods } from '../hooks/usePaymentMethods';
+import { PaymentMethods } from './PaymentMethods';
 
 export const Payment = ({ amount }: { amount: number }) => {
   const { paymentMethods } = usePaymentMethods();
@@ -7,17 +8,7 @@ export const Payment = ({ amount }: { amount: number }) => {
     <div>
       <h3>Payment</h3>
       <div>
-        {paymentMethods.map((method) => (
-          <label key={method.provider}>
-            <input
-              type='radio'
-              name='payment'
-              value={method.provider}
-              defaultChecked={method.provider === 'cash'}
-            />
-            <span>{method.label}</span>
-          </label>
-        ))}
+        <PaymentMethods paymentMethods={paymentMethods} />
       </div>
       <button>${amount}</button>
     </div>
